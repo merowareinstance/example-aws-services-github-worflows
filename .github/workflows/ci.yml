@@ -25,7 +25,7 @@ jobs:
           HOST_TMP_FOLDER: "/tmp"
         options: >-
           --name=localstack
-          --health-cmd="ping localhost:8080"
+          --health-cmd="nmap -p 8080 localhost"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
