@@ -16,13 +16,13 @@ jobs:
           - "4566-4599:4566-4599"
           - 8080:8080
         env:
-          - SERVICES: ${{ env.MYSQL_DATABASE }}
-          - DEBUG: ${DEBUG- }
-          - DATA_DIR: ${DATA_DIR- }
-          - LAMBDA_EXECUTOR: ${LAMBDA_EXECUTOR- }
-          - KINESIS_ERROR_PROBABILITY: ${KINESIS_ERROR_PROBABILITY- }
+          - SERVICES: ${{ env.SERVICES }}
+          - DEBUG: ""
+          - DATA_DIR: ""
+          - LAMBDA_EXECUTOR: ""
+          - KINESIS_ERROR_PROBABILITY: ""
           - DOCKER_HOST: unix:///var/run/docker.sock
-          - HOST_TMP_FOLDER: ${TMPDIR}
+          - HOST_TMP_FOLDER: "/tmp"
         options: >-
           --name=localstack
           --health-cmd="ping localhost:8080"
