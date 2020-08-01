@@ -25,9 +25,9 @@ jobs:
           HOST_TMP_FOLDER: "/tmp"
         options: >-
           --name=localstack
-          --health-cmd="nmap -p 8080 0.0.0.0"
+          --health-cmd="curl --fail http://localhost:8080/ || exit 1"
           --health-interval=10s
-          --health-timeout=5s
+          --health-timeout=10s
           --health-retries=3
     steps:
       - uses: actions/checkout@v2
