@@ -1,9 +1,6 @@
-name: Forest CI
+name: Aws Services CI
 env:
-  MYSQL_DATABASE: test_forest
-  MYSQL_USER: test_user
-  MYSQL_PASSWORD: password
-  MYSQL_HOST: mysql-master
+  SERVICES: dynamodb,sqs,s3 # Add more services depending on your test case
   NODE_ENV: test
 on:
   push:
@@ -13,18 +10,22 @@ jobs:
     container:
       image: node:14.5.0-alpine
     services:
-      mysql-master:
-        image: mysql:5.7
+      localstack:
+        image: localstack/localstack
         ports:
-          - 3306/tcp
+          - "4566-4599:4566-4599"
+          - 8080:8080
         env:
-          MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ env.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          - SERVICES: ${{ env.MYSQL_DATABASE }}
+          - DEBUG: ${DEBUG- }
+          - DATA_DIR: ${DATA_DIR- }
+          - LAMBDA_EXECUTOR: ${LAMBDA_EXECUTOR- }
+          - KINESIS_ERROR_PROBABILITY: ${KINESIS_ERROR_PROBABILITY- }
+          - DOCKER_HOST: unix:///var/run/docker.sock
+          - HOST_TMP_FOLDER: ${TMPDIR}
         options: >-
-          --name=mysql-master
-          --health-cmd="mysqladmin ping"
+          --name=localstack
+          --health-cmd="ping localhost:8080"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -32,7 +33,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install packages
         run: "npm ci"
-      - name: Setup Database
-        run: "npm run migrations"
-      - name: Run Tests
-        run: "npm run test"
+      # - name: Run Tests
+      #   run: "npm run test"
