@@ -11,7 +11,7 @@ jobs:
       image: node:14.5.0-alpine
     services:
       localstack:
-        image: localstack/localstack-full
+        image: localstack/localstack-full # Require full to get UI. Used for health checks.
         ports:
           - "4566-4599:4566-4599"
           - 8080:8080
