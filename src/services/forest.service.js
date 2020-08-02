@@ -1,4 +1,4 @@
-const { aws } = require("../modules");
+const { aws, config } = require("../modules");
 
 const { dynamoClient, sqsClient, s3Client } = aws;
 
@@ -13,27 +13,26 @@ async function getTreesByType(type) {
     };
     result = await dynamoClient.getItem(params).promise();
     return result || null;
-  } catch (error) {
+  } catch (e) {
     console.error(e);
   }
 
   return result || null;
 }
 
-async function getTreeLocationFromS3(id) {
+async function getTreeLocationFromS3(objectKey) {
   let data;
-
   try {
     data = await s3Client
       .getObject({
-        Bucket: "trees",
-        Key: `tree${id}Location.txt`,
+        Bucket: config.get("aws.s3.bucketName"),
+        Key: objectKey,
       })
       .promise();
   } catch (e) {
     console.error(e);
   }
-  return data || null;
+  return data && data.Body ? JSON.parse(data.Body.toString()) : null;
 }
 
 async function readMessageFromSQS() {

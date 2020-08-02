@@ -5,3 +5,4 @@
 const { dynamoClient } = require("../../../src/modules");
 
 // Create Tree Table
+module.exports = dynamoClient;

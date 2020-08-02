@@ -1,19 +1,16 @@
-const { DynamoDB, S3 } = require("aws-sdk");
+const aws = require("aws-sdk");
 
-class AWS {
-  constructor() {
-    const config = {
-      endpoint: "http://127.0.0.1:4566", // Make configurable for test dev/test envs and remove
-      // if connecting to aws rather than local stack
-      region: "us-east-1",
-    };
+const serviceConfig = require("./config");
 
-    this.dynamoClient = new DynamoDB(config);
+const config = serviceConfig.get("aws.config");
 
-    this.sqsClient = new DynamoDB(config);
+const awsConfig = new aws.Config(config);
+// const dynamoClient = aws.DynamoDb
+const sqsClient = new aws.SQS(awsConfig);
+const s3Client = new aws.S3(awsConfig);
 
-    this.s3Client = new S3(config);
-  }
-}
-
-module.exports = new AWS();
+module.exports = {
+  awsConfig,
+  sqsClient,
+  s3Client,
+};

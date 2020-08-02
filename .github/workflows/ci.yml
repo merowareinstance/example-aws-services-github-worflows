@@ -11,10 +11,9 @@ jobs:
       image: node:14.5.0-alpine
     services:
       localstack:
-        image: localstack/localstack-full # Require full to get UI. Used for health checks.
+        image: localstack/localstack
         ports:
-          - "4566-4599:4566-4599"
-          - 8080:8080
+          - "4566:4566" # Localstack exposes all services on same port
         env:
           SERVICES: ${{ env.SERVICES }}
           DEBUG: ""
@@ -25,7 +24,7 @@ jobs:
           HOST_TMP_FOLDER: "/tmp"
         options: >-
           --name=localstack
-          --health-cmd="curl -sS 127.0.0.1:8080 || exit 1"
+          --health-cmd="curl -sS 127.0.0.1:4566 || exit 1"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3

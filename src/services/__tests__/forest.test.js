@@ -1,51 +1,29 @@
-const { getTreesByFruitId } = require("../forest.service");
-const { db } = require("../../modules");
-
-const { Tree, Fruit } = db.models;
+const uuid = require("uuid");
+const { getTreeLocationFromS3 } = require("../forest.service");
+const { aws, config } = require("../../modules");
 
 describe("Forest Service Integration Test", () => {
-  describe("getTreesByFruitId", () => {
-    let greenApple;
-    let appleTree;
-
+  describe("getTreeLocationFromS3", () => {
+    let objectKey;
+    let sampleObj;
     beforeEach(async () => {
-      // Clear db as we will probs run this in parallel
-      await db.sequelize.sync({ force: true });
-
-      // Create Trees for those fruits
-      appleTree = await Tree.create({
-        age: 1000,
-        type: Tree.types.APPLE,
-      });
-
-      // Create Fruits
-      await Fruit.create({
-        type: Tree.types.APPLE,
-        color: Fruit.colors.RED,
-        tree_id: appleTree.id,
-      });
-
-      greenApple = await Fruit.create({
-        type: Tree.types.APPLE,
-        color: Fruit.colors.GREEN,
-        tree_id: appleTree.id,
-      });
+      sampleObj = {
+        type: "APPLE",
+        lat: "4.915833",
+        long: "23.823650",
+      };
+      objectKey = `tree${uuid.v4()}Location.json`;
+      await aws.s3Client
+        .putObject({
+          Body: JSON.stringify(sampleObj),
+          Bucket: config.get("aws.s3.bucketName"),
+          Key: objectKey,
+        })
+        .promise();
     });
-
-    afterAll(async () => {
-      // Clear db as we will probs run this in parallel
-      await db.sequelize.sync({ force: true });
-    });
-
-    test("Should return all trees by id properly if found", async () => {
-      const treeFound = await getTreesByFruitId(greenApple.id);
-      expect(treeFound.id).toEqual(appleTree.id);
-      expect(treeFound.age).toEqual(appleTree.age);
-    });
-
-    test("Should return no trees if not found", async () => {
-      const treeFound = await getTreesByFruitId(50000);
-      expect(treeFound).toEqual(null);
+    test("Should succeed in getting proper tree location from bucket file", async () => {
+      const data = await getTreeLocationFromS3(objectKey);
+      expect(data).toMatchObject(sampleObj);
     });
   });
 });
