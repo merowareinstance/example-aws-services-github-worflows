@@ -23,6 +23,7 @@ class DbNodeEnvironment extends NodeEnvironment {
     console.log(`Setting up sqs queue ${sqsQueueName}`);
     const data = await sqsSetup.createQueue(sqsQueueName);
     serviceConfig.set("aws.sqs.queueUrl", data.QueueUrl);
+    console.log(`SQS QueueUrl ${data.QueueUrl}`);
     console.log(`Done setting up sqs ${sqsQueueName}`);
 
     // S3 bucket setup

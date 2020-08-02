@@ -11,7 +11,7 @@ module.exports = {
       queueUrl: "",
     },
     config: {
-      endpoint: `http://${awsEnvHost}:4566`, // localstack now supports one endpoint entry point for all services
+      endpoint: `http://${awsEnvHost || "localhost"}:4566`, // localstack now supports one endpoint entry point for all services
       region: "us-east-1",
       accessKeyId: "something", // Can be whatever we just need it as a mock
       secretAccessKey: "something", // Can be whatever we just need is as a mock

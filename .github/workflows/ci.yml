@@ -23,12 +23,13 @@ jobs:
           KINESIS_ERROR_PROBABILITY: ""
           DOCKER_HOST: unix:///var/run/docker.sock
           HOST_TMP_FOLDER: "/tmp"
+          HOSTNAME_EXTERNAL: ${{ env.AWS_HOST }}
         options: >-
           --name=localstack
           --health-cmd="curl -sS 127.0.0.1:4566 || exit 1"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=100
+          --health-retries=3
     steps:
       - uses: actions/checkout@v2
       - name: Install packages
