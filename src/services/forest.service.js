@@ -1,6 +1,6 @@
 const { aws, config } = require("../modules");
 
-const { dynamoClient, sqsClient, s3Client } = aws;
+const { dynamoClient, s3Client } = aws;
 
 async function getTreesByType(type) {
   let result;
@@ -35,26 +35,7 @@ async function getTreeLocationFromS3(objectKey) {
   return data && data.Body ? JSON.parse(data.Body.toString()) : null;
 }
 
-async function readMessageFromSQS() {
-  let data;
-
-  try {
-    data = await sqsClient
-      .receiveMessage({
-        QueueUrl: config.get("aws.sqs.queueUrl"),
-        MaxNumberOfMessages: 1,
-      })
-      .promise();
-    console.log(data);
-  } catch (e) {
-    console.error(e);
-  }
-
-  return data ? JSON.parse(data) : null;
-}
-
 module.exports = {
   getTreesByType,
   getTreeLocationFromS3,
-  readMessageFromSQS,
 };

@@ -3,7 +3,6 @@ const aws = require("aws-sdk");
 const serviceConfig = require("./config");
 
 const awsConfig = serviceConfig.get("aws.config");
-console.log('AWS', awsConfig);
 // const dynamoClient = aws.DynamoDb
 const sqsClient = new aws.SQS(awsConfig);
 const s3Client = new aws.S3(awsConfig);
