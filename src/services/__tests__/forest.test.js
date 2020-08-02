@@ -1,6 +1,8 @@
 const uuid = require("uuid");
-const { getTreeLocationFromS3 } = require("../forest.service");
-const { aws, config } = require("../../modules");
+
+let getTreeLocationFromS3;
+let aws;
+let config;
 
 describe("Forest Service Integration Test", () => {
   describe("getTreeLocationFromS3", () => {
@@ -14,6 +16,8 @@ describe("Forest Service Integration Test", () => {
       };
       objectKey = `tree${uuid.v4()}Location.json`;
       try {
+        ({ getTreeLocationFromS3 } = require("../forest.service"));
+        ({ aws, config } = require("../../modules"));
         await aws.s3Client
           .putObject({
             Body: JSON.stringify(sampleObj),
