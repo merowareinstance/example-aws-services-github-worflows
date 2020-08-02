@@ -13,6 +13,7 @@ describe("Forest Service Integration Test", () => {
         long: "23.823650",
       };
       objectKey = `tree${uuid.v4()}Location.json`;
+      console.log(config);
       await aws.s3Client
         .putObject({
           Body: JSON.stringify(sampleObj),
