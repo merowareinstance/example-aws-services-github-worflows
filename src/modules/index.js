@@ -1,7 +1,7 @@
-const aws = require("./aws");
 const config = require("./config");
+const aws = require("./aws");
 
 module.exports = {
-  aws,
   config,
+  aws,
 };
