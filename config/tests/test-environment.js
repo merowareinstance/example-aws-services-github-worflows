@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 const NodeEnvironment = require("jest-environment-node");
-const { config: serviceConfig } = require("../../src/modules");
+const { config: serviceConfig, aws } = require("../../src/modules");
 
 let sqsSetup;
 let s3Setup;
@@ -32,6 +32,7 @@ class DbNodeEnvironment extends NodeEnvironment {
     serviceConfig.set("aws.s3.bucketName", s3BucketName);
     console.log(`Done setting up s3 ${s3BucketName}`);
     this.global.config = serviceConfig;
+    this.global.aws = aws;
   }
 
   async teardown() {
