@@ -1,29 +1,39 @@
-const { aws, config } = require("../modules");
+const { aws, config, db } = require("../modules");
 
-const { dynamoClient, s3Client } = aws;
+const { Fruit, Tree } = db.models;
 
-async function getTreesByType(type) {
-  let result;
-  try {
-    const params = {
-      Key: {
-        type: { S: type },
-      },
-      TableName: "Trees",
-    };
-    result = await dynamoClient.getItem(params).promise();
-    return result || null;
-  } catch (e) {
-    console.error(e);
-  }
+function getAppleTypes() {
+  return new Promise((resolve, reject) => {
+    const data = [];
+    const type = "apple";
+    return Fruit.get(type, (errorFruit, itemFruit) => {
+      if (errorFruit) {
+        return reject(errorFruit);
+      }
 
-  return result || null;
+      if (itemFruit) {
+        data.push(itemFruit);
+      }
+
+      return Tree.get(type, (errorTree, itemTree) => {
+        if (errorTree) {
+          return reject(errorTree);
+        }
+
+        if (itemTree) {
+          data.push(itemTree);
+        }
+
+        return resolve(data);
+      });
+    });
+  });
 }
 
 async function getTreeLocationFromS3(objectKey) {
   let data;
   try {
-    data = await s3Client
+    data = await aws.s3Client
       .getObject({
         Bucket: config.get("aws.s3.bucketName"),
         Key: objectKey,
@@ -36,6 +46,6 @@ async function getTreeLocationFromS3(objectKey) {
 }
 
 module.exports = {
-  getTreesByType,
+  getAppleTypes,
   getTreeLocationFromS3,
 };

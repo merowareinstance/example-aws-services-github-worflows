@@ -19,6 +19,8 @@
   "homepage": "https://github.com/meroware/example-aws-services-github-worflows#readme",
   "dependencies": {
     "aws-sdk": "^2.725.0",
+    "dynogels": "^9.1.0",
+    "joi": "11.3.4",
     "lodash": "^4.17.19",
     "nodemon": "^2.0.4",
     "uuid": "^8.3.0"

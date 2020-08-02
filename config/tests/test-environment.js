@@ -1,10 +1,12 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 const NodeEnvironment = require("jest-environment-node");
-const { config: serviceConfig, aws } = require("../../src/modules");
+const { config: serviceConfig, db } = require("../../src/modules");
 
 let sqsSetup;
 let s3Setup;
+let dynamoDbSetup;
+
 class DbNodeEnvironment extends NodeEnvironment {
   constructor(config, context) {
     super(config, context);
@@ -16,7 +18,7 @@ class DbNodeEnvironment extends NodeEnvironment {
 
     const sqsBaseQueueName = serviceConfig.get("aws.sqs.baseQueueName");
     const s3BaseBucketName = serviceConfig.get("aws.s3.baseBucketName");
-    ({ sqsSetup, s3Setup } = require("./aws-services"));
+    ({ sqsSetup, s3Setup, dynamoDbSetup } = require("./aws-services"));
     const { JEST_WORKER_ID: jestWorkerId } = process.env;
     // SQS bucket setup
     const sqsQueueName = `${sqsBaseQueueName}_${jestWorkerId}`;
@@ -32,8 +34,13 @@ class DbNodeEnvironment extends NodeEnvironment {
     await s3Setup.createBucket(s3BucketName);
     serviceConfig.set("aws.s3.bucketName", s3BucketName);
     console.log(`Done setting up s3 ${s3BucketName}`);
+
+    // Setup DynamoDb
+    await dynamoDbSetup.createTables();
+
+    // export configs and databases for re-usability
     this.global.config = serviceConfig;
-    this.global.aws = aws;
+    this.global.db = db;
   }
 
   async teardown() {
