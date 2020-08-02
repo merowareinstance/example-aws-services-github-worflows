@@ -13,25 +13,17 @@ describe("Forest Service Integration Test", () => {
         long: "23.823650",
       };
       objectKey = `tree${uuid.v4()}Location.json`;
-      try {
-        await aws.s3Client
-          .putObject({
-            Body: JSON.stringify(sampleObj),
-            Bucket: config.get("aws.s3.bucketName"),
-            Key: objectKey,
-          })
-          .promise();
-      } catch (e) {
-        console.log('beforeEach', e);
-      }
+      await aws.s3Client
+        .putObject({
+          Body: JSON.stringify(sampleObj),
+          Bucket: config.get("aws.s3.bucketName"),
+          Key: objectKey,
+        })
+        .promise();
     });
     test("Should succeed in getting proper tree location from bucket file", async () => {
-      try {
-        const data = await getTreeLocationFromS3(objectKey);
+      const data = await getTreeLocationFromS3(objectKey);
       expect(data).toMatchObject(sampleObj);
-      } catch(e) {
-          console.log('TEST', e);
-      }
     });
   });
 });

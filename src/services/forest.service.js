@@ -30,7 +30,7 @@ async function getTreeLocationFromS3(objectKey) {
       })
       .promise();
   } catch (e) {
-    console.error(e);
+    console.error("Error during get object service", e);
   }
   return data && data.Body ? JSON.parse(data.Body.toString()) : null;
 }
@@ -45,7 +45,7 @@ async function readMessageFromSQS() {
         MaxNumberOfMessages: 1,
       })
       .promise();
-      console.log(data);
+    console.log(data);
   } catch (e) {
     console.error(e);
   }

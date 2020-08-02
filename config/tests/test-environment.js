@@ -30,9 +30,8 @@ class DbNodeEnvironment extends NodeEnvironment {
     console.log(`Setting up s3 bucket ${s3BucketName}`);
     await s3Setup.createBucket(s3BucketName);
     serviceConfig.set("aws.s3.bucketName", s3BucketName);
-    console.log(`Done setting up sqs ${s3BucketName}`);
+    console.log(`Done setting up s3 ${s3BucketName}`);
     this.global.config = serviceConfig;
-    this.global.aws = require("../../src/modules/aws");
   }
 
   async teardown() {
