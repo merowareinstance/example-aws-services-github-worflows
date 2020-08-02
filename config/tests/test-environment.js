@@ -13,7 +13,7 @@ class DbNodeEnvironment extends NodeEnvironment {
 
   async setup() {
     await super.setup();
-    console.log(serviceConfig.get("aws"));
+
     const sqsBaseQueueName = serviceConfig.get("aws.sqs.baseQueueName");
     const s3BaseBucketName = serviceConfig.get("aws.s3.baseBucketName");
     ({ sqsSetup, s3Setup } = require("./aws-services"));

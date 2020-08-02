@@ -30,7 +30,7 @@ async function getTreeLocationFromS3(objectKey) {
       })
       .promise();
   } catch (e) {
-    console.error("Error during get object service", e);
+    console.log(new Error("Error during get object service"), e);
   }
   return data && data.Body ? JSON.parse(data.Body.toString()) : null;
 }
