@@ -25,10 +25,10 @@ jobs:
           HOST_TMP_FOLDER: "/tmp"
         options: >-
           --name=localstack
-          --health-cmd="curl -sS localstack:4566 || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          --health-cmd="curl -sS 127.0.0.1:4566 || exit 1"
+          --health-interval=900s
+          --health-timeout=900s
+          --health-retries=900
     steps:
       - uses: actions/checkout@v2
       - name: Install packages
