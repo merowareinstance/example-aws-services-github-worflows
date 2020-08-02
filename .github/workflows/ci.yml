@@ -1,5 +1,6 @@
 name: Aws Services CI
 env:
+  AWS_HOST: localstack
   SERVICES: dynamodb,sqs,s3 # Add more services depending on your test case
   NODE_ENV: test
 on:

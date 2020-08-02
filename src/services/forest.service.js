@@ -41,10 +41,11 @@ async function readMessageFromSQS() {
   try {
     data = await sqsClient
       .receiveMessage({
-        QueueUrl: "http://localhost" /* required */,
+        QueueUrl: config.get("aws.sqs.queueUrl"),
         MaxNumberOfMessages: 1,
       })
       .promise();
+      console.log(data);
   } catch (e) {
     console.error(e);
   }

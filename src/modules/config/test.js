@@ -1,3 +1,5 @@
+const { AWS_HOST: awsEnvHost } = process.env;
+
 module.exports = {
   aws: {
     s3: {
@@ -9,7 +11,7 @@ module.exports = {
       queueUrl: "",
     },
     config: {
-      endpoint: "http://127.0.0.1:4566", // localstack now supports one endpoint entry point for all services
+      endpoint: `http://${awsEnvHost || "127.0.0.1"}:4566`, // localstack now supports one endpoint entry point for all services
       region: "us-east-1",
       accessKeyId: "something", // Can be whatever we just need it as a mock
       secretAccessKey: "something", // Can be whatever we just need is as a mock
