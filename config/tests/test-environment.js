@@ -16,13 +16,13 @@ class DbNodeEnvironment extends NodeEnvironment {
 
   async setup() {
     await super.setup();
-    if (!this.debug) {
-      global.console = {
-        log: () => {},
-        error: () => {},
-        debug: () => {},
-      };
-    }
+    // if (!this.debug) {
+    //   global.console = {
+    //     log: () => {},
+    //     error: () => {},
+    //     debug: () => {},
+    //   };
+    // }
     const sqsBaseQueueName = serviceConfig.get("aws.sqs.baseQueueName");
     const s3BaseBucketName = serviceConfig.get("aws.s3.baseBucketName");
     ({ sqsSetup, s3Setup, dynamoDbSetup } = require("./aws-services"));
