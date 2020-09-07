@@ -1,6 +1,6 @@
 [![How To Write a Readme Walkthrough](https://img.youtube.com/vi/-SKjWPEc-KQ/0.jpg)](https://www.youtube.com/watch?v=-SKjWPEc-KQ)
 
-> ▶️   How to run AWS services inside Github Actions | Introduction to Github Actions
+> Click To Watch ☝️ - How to run AWS services inside Github Actions | Introduction to Github Actions
 
 
 # example-aws-services-github-worflows
